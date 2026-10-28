@@ -1,0 +1,90 @@
+DAY-3
+================
+sudo docker logs -f conid
+sudo docker exec -it conid /bin/bash
+--------------------------
+docker login,tag,push,pull 
+=================================
+IMAGE LIFECYCLE
+==============================
+we can create image in two ways
+1: from con
+2: from Dockerfile
+----------------------------------
+sudo docker run -it --name mycentosjava centos
+--
+
+sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+install inside con 
+=========================
+yum install java-17 -y
+yum install maven -y
+yum install git -y
+-------------------------
+create image from con
+===========================
+docker commit c1 mycentosImage
+docker commit conname imagename 
+docker commit a62fc8d791a5 mycentosimage
+--------------------------------------
+how to change the TAG name for image 
+------------------------
+docker tag mycentosImage:latest ashis/mycentosImage:latest
+sudo docker tag mycentosimage:latest devopsawstrainer/mycentosimage:javamaven
+--------------------------
+1st time in dockerhost we need login for dockerhub
+------
+sudo docker login 
+    =>username
+	=>password 
+==================
+then push the image to docker hub
+-------------
+docker push dockerusername/mycentosImage:latest
+docker push devopsawstrainer/mycentosimage:javamaven
+
+===========
+in different dockerhost please pull the image to test the image 
+===================================
+sudo docker pull devopsawstrainer/mycentosimage:javamaven
+
+=================================
+dockerfile
+===================
+
+Image creation
+=====================
+We can create a docker file and inside that we will write all the instrauctions so this way if you ask
+the docker daemon to use this file and generate the image what daemon will do is it will try to read all
+instructions that you have given this file read it line by line and convert it into a image so that is 
+how instead of you running all steps you can just run this single file or you can ask the daemon to read this file
+take all the instructions and create a image in the background
+
+docker file
+===========================
+=>it is nothing but a textfile
+-----
+two colom
+----------------
+INSTRUCTION  COMMANDS/ARGUMENTS
+-----------  -------------------
+FROM         <Imagename>
+RUN          <OS-CMD>
+CMD          <Default-First-CMD> [executable,arg1, arg2] [bin/bash]
+ENTRYPOINT   <Default-First-CMD> [executable,arg1, arg2, /bin/bash or arg3] 
+ENV          <variable><value> ->final image
+ARG          <VARIABLE>=VALUE =>if u set env using ARG it will avliable in temp conatiner not your image 
+USER         <username>
+WORKDIR      <PATH>
+COPY         <host-src> <container-dest>
+<host-src >=>it will search the dir in corrent dir where u are excuting the dockerfile
+ADD           <host-src> <container-dest>
+EXPOSE        <portno>
+=======================
+FROM centos
+RUN yum install java -y
+RUN yum install git -y
+
+----------------------------------
+
